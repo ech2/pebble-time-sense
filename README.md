@@ -37,8 +37,9 @@ time intervals.
 This app doesn’t have any interface. Just select it and press middle button to
 change time intervals. Supported intervals are: “Every hour”, “Every 30 mins”,
 “Every 15 mins”, “Every 10 mins”, “Every 5 mins”. For example, “Every 15 mins”
-mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each our.
+mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each hour.
 
 Currently, if another event has been scheduled on the same minute, Time Sense
-*will not* produce a vibration. So, your alarms carefully.
+*will not* produce a vibration. And it won’t probably reschedule the next
+vibration. I’ll fix that later, so, set your alarms carefully for now.
 
