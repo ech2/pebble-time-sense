@@ -12,7 +12,7 @@ time intervals.
 
 > These instructions have only been tested on Arch Linux.
 
-1. Download install the SDK distribution following the instructions:
+1. Follow the instructions:
    https://developer.rebble.io/developer.pebble.com/sdk/install/linux/index.html
 2. Activate the Pebble’s *virtualenv* and install the SDK files:
    ```
