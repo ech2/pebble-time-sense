@@ -14,20 +14,26 @@ time intervals.
 
 1. Follow the instructions:
    https://developer.rebble.io/developer.pebble.com/sdk/install/linux/index.html
-2. Activate the Pebble’s *virtualenv* and install the SDK files:
+2. Activate the Pebble’s *virtualenv*:
    ```
    cd ~/pebble-dev/pebble-sdk-4.5-linux64
    source .env/bin/activate
+   ```
+3. Create file `NO_TRACKING` in `~/.pebble-sdk` dir and install SDK files
+   from an archived source (because Pebble servers does’t work anymore):
+   ```
+   mkdir -p ~/.pebble-sdk
+   touch ~/.pebble-sdk/NO_TRACKING
    pebble sdk install https://github.com/aveao/PebbleArchive/raw/master/SDKCores/sdk-core-4.3.tar.bz2
    ```
-3. Enable *Developer Connection* in the Pebble Android / iOS app.
-4. Clone this repo and install this app:
+4. Enable *Developer Connection* in the Pebble Android / iOS app.
+5. Clone this repo and install this app:
    ```
    git clone https://github.com/ech2/pebble-time-sense
    cd pebble-time-sense
    pebble build && pebble install --phone {phone_ip}
    ```
-5. Now you can deactivate *virtualenv*:
+6. Now you can deactivate *virtualenv*:
    ```
    deactivate
    ```
