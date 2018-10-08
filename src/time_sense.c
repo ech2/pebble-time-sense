@@ -47,6 +47,7 @@ static void prv_toggle_state() {
   if(launch_reason() == APP_LAUNCH_USER || launch_reason() == APP_LAUNCH_QUICK_LAUNCH) {
     s_interval = (s_interval + 1) % TS_STATE_COUNT;
   }
+  APP_LOG(APP_LOG_LEVEL_INFO, "Current interval: %s", TS_INTERVAL_NAMES[s_interval]);
 }
 
 ////
@@ -83,9 +84,8 @@ static void prv_vibrate_if_needed() {
 //// 
 
 static void prv_setup_wakeup() {
-  if (s_interval == TS_OFF) {
-    APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Cancel all wakeups");
-    wakeup_cancel_all();
+if (s_interval == TS_OFF) {
+    APP_LOG(APP_LOG_LEVEL_INFO, "Will not reschedule");
     return;
   }
 
@@ -93,30 +93,23 @@ static void prv_setup_wakeup() {
 
   time_t rawtime_now = time(NULL);
   struct tm* now = localtime(&rawtime_now);
-  int mod = TS_INTERVAL_VALS[s_interval];
+  int now_hour = now->tm_hour;
+
+  int interval = TS_INTERVAL_VALS[s_interval]; 
+  int next_min = (now->tm_min / interval + 1) * interval;
 
   while (true) {
-    int min_rem = now->tm_min % mod;
-    int next_min = (now->tm_min / mod + 1) * mod;
-
-    if (next_min >= 60) {
-      now->tm_hour = (now->tm_hour + 1) % 24;
-      now->tm_min = 0;
-    } else {
-      now->tm_min = next_min;
-    }
+    now->tm_hour = (now_hour + (next_min / 60)) % 24;
+    now->tm_min = next_min < 60 ? next_min : 0;
     now->tm_sec = 0;
 
-    APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Current interval: %s",
-            TS_INTERVAL_NAMES[s_interval]);
-    APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Next vibration: %d:%d",
-            now->tm_hour, now->tm_min);
-
     if (wakeup_schedule(mktime(now), 0, false) >= 0) {
+      APP_LOG(APP_LOG_LEVEL_INFO, "Next vibration: %d:%d", now->tm_hour, now->tm_min);
       break;
     } else {
       // try to reschedule one minute later
-      now->tm_min = now->tm_min + min_rem + 1;      
+      next_min = next_min + 1;
+      APP_LOG(APP_LOG_LEVEL_INFO, "Rescheduling. Next min: %d", next_min);
     }
   }
 }
