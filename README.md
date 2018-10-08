@@ -19,8 +19,8 @@ time intervals.
    cd ~/pebble-dev/pebble-sdk-4.5-linux64
    source .env/bin/activate
    ```
-3. Create file `NO_TRACKING` in `~/.pebble-sdk` dir and install SDK files
-   from an archived source (because Pebble servers does’t work anymore):
+3. Create file `NO_TRACKING` in `~/.pebble-sdk` and install SDK core files
+   from an archive repository (official Pebble’s servers doesn’t work anymore):
    ```
    mkdir -p ~/.pebble-sdk
    touch ~/.pebble-sdk/NO_TRACKING
