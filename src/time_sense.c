@@ -24,7 +24,6 @@ static const char* TS_INTERVAL_NAMES[] = {
   "Every 5 mins"
 };
 
-
 static TS_Interval s_interval = TS_OFF;
 
 const uint32_t TS_STATE_COUNT = 6;
@@ -93,29 +92,37 @@ static void prv_setup_wakeup() {
     return;
   }
 
+  wakeup_cancel_all();
+
   time_t rawtime_now = time(NULL);
   struct tm* now = localtime(&rawtime_now);
-
   int mod = TS_INTERVAL_VALS[s_interval];
-  int next_min = (now->tm_min / mod + 1) * mod;
 
-  if (next_min >= 60) {
-    now->tm_hour = (now->tm_hour + 1) % 24;
-    now->tm_min = 0;
-  } else {
-    now->tm_min = next_min;
+  while (true) {
+    int min_rem = now->tm_min % mod;
+    int next_min = (now->tm_min / mod + 1) * mod;
+
+    if (next_min >= 60) {
+      now->tm_hour = (now->tm_hour + 1) % 24;
+      now->tm_min = 0;
+    } else {
+      now->tm_min = next_min;
+    }
+    now->tm_sec = 0;
+
+    APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Current interval: %s",
+            TS_INTERVAL_NAMES[s_interval]);
+    APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Next vibration: %d:%d",
+            now->tm_hour, now->tm_min);
+
+    if (wakeup_schedule(mktime(now), 0, false) >= 0) {
+      break;
+    } else {
+      // try to reschedule one minute later
+      now->tm_min = now->tm_min + min_rem + 1;      
+    }
   }
-  now->tm_sec = 0;
-
-  APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Current interval: %s",
-          TS_INTERVAL_NAMES[s_interval]);
-  APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Next vibration: %d:%d",
-          now->tm_hour, now->tm_min);
-
-  wakeup_cancel_all();
-  wakeup_schedule(mktime(now), 0, false); 
 }
-
 
 ////
 //// Lifecycle
