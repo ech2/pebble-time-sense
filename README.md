@@ -46,6 +46,5 @@ change time intervals. Supported intervals are: “Every hour”, “Every 30 mi
 mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each hour.
 
 Currently, if another event has been scheduled on the same minute, Time Sense
-*will not* produce a vibration. And it won’t probably reschedule the next
-vibration. I’ll fix that later, so, set your alarms carefully for now.
-
+will continue to try to schedule the vibration one minute later until it
+succeeds (number of tries isn’t limited at the moment).
