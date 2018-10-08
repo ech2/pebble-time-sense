@@ -83,9 +83,6 @@ static void prv_vibrate_if_needed() {
 //// 
 
 static void prv_setup_wakeup() {
-  if (launch_reason() != APP_LAUNCH_USER && launch_reason() != APP_LAUNCH_QUICK_LAUNCH) {
-    return;
-  }
   if (s_interval == TS_OFF) {
     APP_LOG(APP_LOG_LEVEL_INFO, "prv_setup_worker() | Cancel all wakeups");
     wakeup_cancel_all();
