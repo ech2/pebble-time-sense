@@ -99,8 +99,8 @@ if (s_interval == TS_OFF) {
   int next_min = (now->tm_min / interval + 1) * interval;
 
   while (true) {
-    now->tm_hour = (now_hour + (next_min / 60)) % 24;
-    now->tm_min = next_min < 60 ? next_min : 0;
+    now->tm_hour = (now_hour + (next_min / 60)) % 24; 
+    now->tm_min = next_min % 60;
     now->tm_sec = 0;
 
     if (wakeup_schedule(mktime(now), 0, false) >= 0) {
