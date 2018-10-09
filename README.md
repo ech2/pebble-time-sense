@@ -1,8 +1,10 @@
 Time Sense for Pebble
 =================
 
-An app that reminds of time passing by vibrating your Pebble watch at specified
-time intervals.
+Time Sense reminds of time passing by vibrating your Pebble watch at specified
+time intervals. It works in the background, so you can use your watch for
+anything else. Vibration interval lengths are configurable and can be in the
+range from 1 hour down to 5 mins.
 
 ## Installation
 
@@ -46,5 +48,17 @@ change time intervals. Supported intervals are: “Every hour”, “Every 30 mi
 mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each hour.
 
 Currently, if another event has been scheduled on the same minute, Time Sense
-will continue to try to schedule the vibration one minute later until it
-succeeds (number of tries isn’t limited at the moment).
+will continuosly attempt to schedule the vibration one minute later until it
+finally succeed (number of attempts isn’t limited at the moment).
+
+## Alternatives
+
+There’re alternative apps that do vibration on specified intervals. Ironically,
+I found them after I wrote this one.
+
+1. [TimeStyle](https://github.com/freakified/TimeStylePebble) watchface has a
+   setting that enables periodic vibration at either 1 hour or 30 minutes
+   interval. Time Sense supports more interval options.
+2. [Purr](https://github.com/jbrooksuk/Purr) does vibration every 5 mins. From
+   what I can read in its source code, this app needs to be open in order to
+   work. Time Sense works in background.
