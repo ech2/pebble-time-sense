@@ -89,24 +89,18 @@ if (s_interval == TS_OFF) {
 
   wakeup_cancel_all();
 
-  time_t rawtime_now = time(NULL);
-  struct tm* now = localtime(&rawtime_now);
-  int now_hour = now->tm_hour;
-
   int interval = TS_INTERVAL_VALS[s_interval]; 
-  int next_min = (now->tm_min / interval + 1) * interval;
 
-  while (true) {
-    now->tm_hour = (now_hour + (next_min / 60)) % 24; 
-    now->tm_min = next_min % 60;
-    now->tm_sec = 0;
+  time_t rawtime_now = time(NULL);
+  struct tm* now = localtime(&rawtime_now); 
+  now->tm_min = ((int) now->tm_min / interval) * interval;
+  now->tm_sec = 0;
+  
+  time_t next = mktime(now) + interval * 60;
 
-    if (wakeup_schedule(mktime(now), 0, false) >= 0) {
-      break;
-    } else {
-      // try to reschedule one minute later
-      next_min = next_min + 1;
-    }
+  while (wakeup_schedule(next, 0, false) < 0) {
+    // if failed to schedule, try to reschedule one minute later
+    next = next + 60;
   }
 }
 
