@@ -47,7 +47,6 @@ static void prv_toggle_state() {
   if(launch_reason() == APP_LAUNCH_USER || launch_reason() == APP_LAUNCH_QUICK_LAUNCH) {
     s_interval = (s_interval + 1) % TS_STATE_COUNT;
   }
-  APP_LOG(APP_LOG_LEVEL_INFO, "Current interval: %s", TS_INTERVAL_NAMES[s_interval]);
 }
 
 ////
@@ -83,9 +82,8 @@ static void prv_vibrate_if_needed() {
 //// Wakeup
 //// 
 
-static void prv_setup_wakeup() {
+static void prv_schedule_wakeup() {
 if (s_interval == TS_OFF) {
-    APP_LOG(APP_LOG_LEVEL_INFO, "Will not reschedule");
     return;
   }
 
@@ -104,12 +102,10 @@ if (s_interval == TS_OFF) {
     now->tm_sec = 0;
 
     if (wakeup_schedule(mktime(now), 0, false) >= 0) {
-      APP_LOG(APP_LOG_LEVEL_INFO, "Next vibration: %d:%d", now->tm_hour, now->tm_min);
       break;
     } else {
       // try to reschedule one minute later
       next_min = next_min + 1;
-      APP_LOG(APP_LOG_LEVEL_INFO, "Rescheduling. Next min: %d", next_min);
     }
   }
 }
@@ -122,7 +118,7 @@ static void prv_init(void) {
   prv_state_read();
   prv_toggle_state();
   prv_vibrate_if_needed();
-  prv_setup_wakeup();
+  prv_schedule_wakeup();
 }
 
 static void prv_deinit(void) {
@@ -135,3 +131,4 @@ int main(void) {
   app_event_loop();
   prv_deinit();
 }
+
