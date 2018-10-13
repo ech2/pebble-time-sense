@@ -52,8 +52,8 @@ mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each hour.
 At first startup, Time Sense tries to schedule itself to wake up at the time of
 next interval. If another event has been scheduled on the same minute, the app
 will continuously attempt to reschedule the wake up one minute later until it
-finally succeed (number of attempts isn’t limited at the moment). If the app is
-executed by a wake up, it first vibrates and then schedules the next wake up.
+finally succeed (the number of attempts isn’t limited). If the app was executed
+by a wake up, it first vibrates, and then schedules the next wake up.
 
 This mechanism creates an illusion that the app is executing in background, and
 allows to overcome some limitations of the Pebble API. It can be disrupted by
@@ -61,7 +61,7 @@ other apps that also schedule their wake ups, e.g. alarms, as they can unload
 other apps’ wake ups that are scheduled on the same minute. If that happens,
 Time Sense won’t be able to schedule vibration on the next interval.
 
-This design trade-off, that allows to have a battery-efficient auto-recheduling
+This design trade-off  allows to have a battery-efficient auto-recheduling
 alarm working “kind of” in background.
 
 ## Alternatives
