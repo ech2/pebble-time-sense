@@ -47,9 +47,24 @@ change time intervals. Supported intervals are: “Every hour”, “Every 30 mi
 “Every 15 mins”, “Every 10 mins”, “Every 5 mins”. For example, “Every 15 mins”
 mean that Pebble will vibrate on 15-th, 30-th and 45-th minute of each hour.
 
-Currently, if another event has been scheduled on the same minute, Time Sense
-will continuosly attempt to schedule the vibration one minute later until it
-finally succeed (number of attempts isn’t limited at the moment).
+## How it works
+
+At first startup, Time Sense tries to schedule itself to wake up at the time of
+next interval. If another event has been scheduled on the same minute, the app
+will continuously attempt to reschedule the wake up one minute later until it
+finally succeed (number of attempts isn’t limited at the moment). If the app is
+executed by a wake up, it first vibrates and then schedules the next wake up.
+
+This mechanism creates an illusion that software is executing in background and
+allows to overcome some limitations of the Pebble API. It can be disrupted by
+other apps that also schedule their wake ups, e.g. alarms, as they can unload
+other apps’ wake ups that are scheduled on the same minute. If that happens,
+Time Sense won’t be able to schedule vibration on the next interval.
+
+The interval vibration could be implemented more robustly inside a watchface
+app. But it could be desirable to have this functionality without locking into
+a watchface. And from my experience, the alarm issue isn’t crucial at all, as I
+often disable Time Sense before going to sleep.
 
 ## Alternatives
 
