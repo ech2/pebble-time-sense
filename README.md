@@ -55,16 +55,14 @@ will continuously attempt to reschedule the wake up one minute later until it
 finally succeed (number of attempts isn’t limited at the moment). If the app is
 executed by a wake up, it first vibrates and then schedules the next wake up.
 
-This mechanism creates an illusion that software is executing in background and
+This mechanism creates an illusion that the app is executing in background, and
 allows to overcome some limitations of the Pebble API. It can be disrupted by
 other apps that also schedule their wake ups, e.g. alarms, as they can unload
 other apps’ wake ups that are scheduled on the same minute. If that happens,
 Time Sense won’t be able to schedule vibration on the next interval.
 
-The interval vibration could be implemented more robustly inside a watchface
-app. But it could be desirable to have this functionality without locking into
-a watchface. And from my experience, the alarm issue isn’t crucial at all, as I
-often disable Time Sense before going to sleep.
+This design trade-off, that allows to have a battery-efficient auto-recheduling
+alarm working “kind of” in background.
 
 ## Alternatives
 
